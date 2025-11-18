@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: w205_mongo
+    volumes:
+      - /home/w205/docker/mounts/mongo/data:/data/db
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: w205_redis
+    volumes:
+      - /home/w205/docker/mounts/redis/data:/data
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+
+  nginx:
+    image: w205_nginx
+    volumes:
+      - /home/w205/user:/user
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - "80:80"
+      - "443:443"
+
+  neo4j:
+    image: w205_neo4j
+    volumes:
+      - /home/w205/user:/user
+      - /home/w205/docker/mounts/neo4j/data:/data
+    environment:
+      NEO4J_PLUGINS: '["graph-data-science"]'
+      NEO4J_AUTH: 'neo4j/ucb_mids_w205'
+    expose:
+      - "7473"
+      - "7474"
+      - "7687"
+    ports:
+      - "7473:7473"
+      - "7474:7474"
+      - "7687:7687"
+
+  anaconda:
+    image: w205_anaconda
+    stdin_open: true
+    tty: true
+    volumes:
+      - /home/w205/user:/user
+      - /home/w205/docker/mounts/anaconda/environments:/opt/conda/envs
+    expose:
+      - "5000"
+      - "8888"
+    ports:
+      - "5000:5000"
+      - "8888:8888"
+
+
